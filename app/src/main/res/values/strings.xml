@@ -1,6 +1,6 @@
 <resources>
-    <string name="app_name" translatable="false">Nmedia</string>
-    <string name="hello_world" translatable="false">Nmedia!</string>
+    <string name="app_name">Nmedia</string>
+    <string name="hello_world">Nmedia!</string>
     <string name="description_post_author">User\'s avatar</string>
     <string name="liked_count">10</string>
     <string name="share_count">5</string>

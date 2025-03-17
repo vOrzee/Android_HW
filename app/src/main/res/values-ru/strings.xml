@@ -3,4 +3,7 @@
     <string name="app_name">Нмедиа</string>
     <string name="hello_world">Нмедиа!</string>
     <string name="description_post_author">Аватар пользователя</string>
+    <string name="liked_count">10</string>
+    <string name="share_count">5</string>
+    <string name="view_count">200</string>
 </resources>
