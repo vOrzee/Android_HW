@@ -2,7 +2,7 @@
     <string name="app_name">Nmedia</string>
     <string name="hello_world">Nmedia!</string>
     <string name="description_post_author">User\'s avatar</string>
-    <string name="liked_count">10</string>
-    <string name="share_count">5</string>
-    <string name="view_count">200</string>
+    <string name="liked_count"> </string>
+    <string name="share_count"> </string>
+    <string name="view_count"> </string>
 </resources>

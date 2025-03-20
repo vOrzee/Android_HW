@@ -19,26 +19,26 @@
         tools:srcCompat="@sample/posts.json/data/authorAvatar" />
 
     <TextView
-        android:id="@+id/textView1"
+        android:id="@+id/author"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:singleLine="true"
         tools:text="@sample/posts.json/data/author"
-        app:layout_constraintBottom_toTopOf="@id/textView2"
+        app:layout_constraintBottom_toTopOf="@id/published"
         app:layout_constraintEnd_toStartOf="@id/menu"
         app:layout_constraintStart_toEndOf="@id/imageView"
         app:layout_constraintTop_toTopOf="@id/imageView" />
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/published"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         tools:text="@sample/posts.json/data/published"
         app:layout_constraintBottom_toBottomOf="@id/imageView"
         app:layout_constraintStart_toEndOf="@id/imageView"
-        app:layout_constraintTop_toBottomOf="@id/textView1" />
+        app:layout_constraintTop_toBottomOf="@id/author" />
 
     <ImageButton
         android:id="@+id/menu"
@@ -54,7 +54,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:barrierDirection="bottom"
-        app:constraint_referenced_ids="imageView,textView2,menu" />
+        app:constraint_referenced_ids="author,published,menu" />
 
     <TextView
         android:id="@+id/content"
@@ -75,6 +75,7 @@
     <TextView
         android:id="@+id/liked_count"
         android:layout_width="wrap_content"
+        android:minWidth="30dp"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/common_spacing"
         app:layout_constraintTop_toBottomOf="@id/content"
@@ -93,6 +94,7 @@
     <TextView
         android:id="@+id/share_count"
         android:layout_width="wrap_content"
+        android:minWidth="30dp"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/common_spacing"
         app:layout_constraintTop_toBottomOf="@id/content"
@@ -112,6 +114,7 @@
     <TextView
         android:id="@+id/view_count"
         android:layout_width="wrap_content"
+        android:minWidth="30dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/common_spacing"
         app:layout_constraintTop_toBottomOf="@id/content"
