@@ -57,6 +57,7 @@ class MainActivity : AppCompatActivity() {
                 post.reposts ++
                 shareCount.text = if (post.reposts < 1) "" else numToString(post.reposts)
             }
+
         }
 
     }
@@ -66,7 +67,7 @@ class MainActivity : AppCompatActivity() {
             return "%.1fK".format(Locale.ROOT, likes/1000.0)
         } else if (likes in 10000..999999){
             return "%dK".format(Locale.ROOT, likes/1000)
-        } else if (likes > 1000000){
+        } else if (likes >= 1000000){
             return "%.1fM".format(Locale.ROOT, likes/1_000_000.0)
         }
         return likes.toString()
