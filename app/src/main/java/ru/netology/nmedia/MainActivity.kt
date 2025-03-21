@@ -9,6 +9,7 @@ import androidx.core.view.WindowInsetsCompat
 import ru.netology.nmedia.databinding.ActivityMainBinding
 import ru.netology.nmedia.dto.Post
 import java.util.Locale
+import kotlin.math.roundToInt
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -30,8 +31,8 @@ class MainActivity : AppCompatActivity() {
             content = "Привет, это новая Нетология! Когда-то Нетология начиналась с интенсивов по онлайн-маркетингу. Затем появились курсы по дизайну, разработке, аналитике и управлению. Мы растём сами и помогаем расти студентам: от новичков до уверенных профессионалов. Но самое важное остаётся с нами: мы верим, что в каждом уже есть сила, которая заставляет хотеть больше, целиться выше, бежать быстрее. Наша миссия — помочь встать на путь роста и начать цепочку перемен → http://netolo.gy/fyb",
             published = "21 мая в 18:36",
             likedByMe = false,
-            likes = 999999,
-            reposts = 1,
+            likes = 1099,
+            reposts = 10999998,
             views = 0
         )
 
@@ -39,6 +40,9 @@ class MainActivity : AppCompatActivity() {
             author.text = post.author
             published.text = post.published
             content.text = post.content
+            likedCount.text = numToString(post.likes)
+            shareCount.text = numToString(post.reposts)
+            viewCount.text = numToString(post.views)
 
             if (post.likedByMe) {
                 liked.setImageResource(R.drawable.baseline_favorite_24)
@@ -58,6 +62,10 @@ class MainActivity : AppCompatActivity() {
                 shareCount.text = if (post.reposts < 1) "" else numToString(post.reposts)
             }
 
+            root.setOnClickListener{
+                post.views ++
+                viewCount.text = if (post.views < 1) "" else numToString(post.views)
+            }
         }
 
     }
