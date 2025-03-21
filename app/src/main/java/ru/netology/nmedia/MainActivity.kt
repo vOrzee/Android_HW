@@ -32,7 +32,7 @@ class MainActivity : AppCompatActivity() {
             published = "21 мая в 18:36",
             likedByMe = false,
             likes = 1099,
-            reposts = 10999998,
+            reposts = 999998,
             views = 0
         )
 
@@ -72,11 +72,33 @@ class MainActivity : AppCompatActivity() {
 
     private fun numToString(likes: Long): CharSequence? {
         if (likes in 1000..9999){
-            return "%.1fK".format(Locale.ROOT, likes/1000.0)
+
+            val thousands = (likes/1000).toString()
+            var dozens = ((likes - (likes/1000) * 1000)/100).toString()
+            dozens = if (dozens.equals("0")) {
+                ""
+            } else {
+                ".$dozens"
+            }
+            val kilo = "K"
+            return "$thousands$dozens$kilo"
+
         } else if (likes in 10000..999999){
+
             return "%dK".format(Locale.ROOT, likes/1000)
+
         } else if (likes >= 1000000){
-            return "%.1fM".format(Locale.ROOT, likes/1_000_000.0)
+
+            val millions = (likes/1_000_000).toString()
+            var thousands = ((likes - (likes/1_000_000) * 1_000_000)/100_000).toString()
+            thousands = if (thousands.equals("0")) {
+                ""
+            } else {
+                ".$thousands"
+            }
+            val mega = "M"
+            return "$millions$thousands$mega"
+
         }
         return likes.toString()
     }
