@@ -47,7 +47,7 @@
         android:layout_height="wrap_content"
         android:background="@android:color/transparent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/imageView"
         app:srcCompat="@drawable/baseline_more_vert_24" />
 
     <androidx.constraintlayout.widget.Barrier
