@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import ru.netology.nmedia.databinding.ActivityMainBinding
+import ru.netology.nmedia.databinding.PostCardBinding
 import java.util.Locale
 
 class MainActivity : AppCompatActivity() {
@@ -26,29 +27,30 @@ class MainActivity : AppCompatActivity() {
         val binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        viewModel.data.observe(this) { post ->
-            with(binding) {
-                author.text = post.author
-                published.text = post.published
-                content.text = post.content
-                likedCount.text = numToString(post.likes)
-                shareCount.text = numToString(post.reposts)
-                viewCount.text = numToString(post.views)
+        viewModel.data.observe(this) { posts ->
+            posts.map { post ->
+                PostCardBinding.inflate(layoutInflater, binding.root, true).apply {
+                    author.text = post.author
+                    published.text = post.published
+                    content.text = post.content
+                    likedCount.text = numToString(post.likes)
+                    shareCount.text = numToString(post.reposts)
+                    viewCount.text = numToString(post.views)
 
-                liked.setImageResource(R.drawable.baseline_favorite_24)
+                    liked.setImageResource(R.drawable.baseline_favorite_24)
 
-                liked.setImageResource(
+                    liked.setImageResource(
                         if (post.likedByMe) R.drawable.baseline_favorite_24 else R.drawable.baseline_favorite_border_24
                     )
+                    liked.setOnClickListener {
+                        viewModel.likeById(post.id)
+                    }
+                    share.setOnClickListener {
+                        viewModel.shareById(post.id)
+                    }
+                }.root
             }
         }
-        binding.liked.setOnClickListener {
-            viewModel.like()
-        }
-        binding.share.setOnClickListener {
-            viewModel.share()
-        }
-
     }
 
     private fun numToString(likes: Long): CharSequence? {
