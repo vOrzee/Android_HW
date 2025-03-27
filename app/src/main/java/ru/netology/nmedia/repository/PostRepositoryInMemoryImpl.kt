@@ -31,7 +31,7 @@ class PostRepositoryInMemoryImpl: PostRepository {
             id = 3,
             author = "Нетология. Университет интернет-профессий будущего",
             content = "В каждом есть сила и талант, чтобы добиваться больших целей. Мы помогаем найти путь развития и реализовать себя через профессию — так, как вам этого хочется. В каждом есть сила и талант, чтобы добиваться больших целей. Мы помогаем найти путь развития и реализовать себя через профессию — так, как вам этого хочется. В каждом есть сила и талант, чтобы добиваться больших целей. Мы помогаем найти путь развития и реализовать себя через профессию — так, как вам этого хочется. В каждом есть сила и талант, чтобы добиваться больших целей. Мы помогаем найти путь развития и реализовать себя через профессию — так, как вам этого хочется",
-            published = "22 мая в 17:20",
+            published = "30 мая в 17:20",
             likedByMe = false,
             likes = 2199,
             reposts = 213,
@@ -45,7 +45,7 @@ class PostRepositoryInMemoryImpl: PostRepository {
 
     override fun likeById(id: Long) {
         posts = posts.map{ post: Post ->
-            if (post.id != id) post else post.copy(likedByMe = !post.likedByMe, likes = if(post.likedByMe) post.likes + 1 else post.likes - 1)
+            if (post.id != id) post else post.copy(likedByMe = !post.likedByMe, likes = if(!post.likedByMe) post.likes + 1 else post.likes - 1)
         }
         data.value = posts
     }
