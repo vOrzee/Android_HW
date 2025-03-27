@@ -29,7 +29,7 @@ class MainActivity : AppCompatActivity() {
 
         viewModel.data.observe(this) { posts ->
             posts.map { post ->
-                PostCardBinding.inflate(layoutInflater, binding.root, true).apply {
+                PostCardBinding.inflate(layoutInflater, binding.container, true).apply {
                     author.text = post.author
                     published.text = post.published
                     content.text = post.content
