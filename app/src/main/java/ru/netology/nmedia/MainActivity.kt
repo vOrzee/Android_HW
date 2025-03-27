@@ -6,13 +6,12 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import ru.netology.nmedia.adapter.PostAdapter
 import ru.netology.nmedia.databinding.ActivityMainBinding
 import ru.netology.nmedia.databinding.PostCardBinding
 import java.util.Locale
 
 class MainActivity : AppCompatActivity() {
-
-    private val viewModel: PostViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,62 +26,13 @@ class MainActivity : AppCompatActivity() {
         val binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        val viewModel: PostViewModel by viewModels()
+        val adapter = PostAdapter {
+            viewModel.likeById(it.id)
+        }
+        binding.list.adapter = adapter
         viewModel.data.observe(this) { posts ->
-            posts.map { post ->
-                PostCardBinding.inflate(layoutInflater, binding.container, true).apply {
-                    author.text = post.author
-                    published.text = post.published
-                    content.text = post.content
-                    likedCount.text = numToString(post.likes)
-                    shareCount.text = numToString(post.reposts)
-                    viewCount.text = numToString(post.views)
-
-                    liked.setImageResource(R.drawable.baseline_favorite_24)
-
-                    liked.setImageResource(
-                        if (post.likedByMe) R.drawable.baseline_favorite_24 else R.drawable.baseline_favorite_border_24
-                    )
-                    liked.setOnClickListener {
-                        viewModel.likeById(post.id)
-                    }
-                    share.setOnClickListener {
-                        viewModel.shareById(post.id)
-                    }
-                }.root
-            }
+            adapter.list = posts
         }
-    }
-
-    private fun numToString(likes: Long): CharSequence? {
-        if (likes in 1000..9999){
-
-            val thousands = (likes/1000).toString()
-            var dozens = ((likes - (likes/1000) * 1000)/100).toString()
-            dozens = if (dozens.equals("0")) {
-                ""
-            } else {
-                ".$dozens"
-            }
-            val kilo = "K"
-            return "$thousands$dozens$kilo"
-
-        } else if (likes in 10000..999999){
-
-            return "%dK".format(Locale.ROOT, likes/1000)
-
-        } else if (likes >= 1000000){
-
-            val millions = (likes/1_000_000).toString()
-            var thousands = ((likes - (likes/1_000_000) * 1_000_000)/100_000).toString()
-            thousands = if (thousands.equals("0")) {
-                ""
-            } else {
-                ".$thousands"
-            }
-            val mega = "M"
-            return "$millions$thousands$mega"
-
-        }
-        return likes.toString()
     }
 }
