@@ -10,16 +10,18 @@ import ru.netology.nmedia.databinding.PostCardBinding
 import ru.netology.nmedia.dto.Post
 import java.util.Locale
 
+//этот alias определяет следующий тип: лямбда функция, у которой на входе Post, а на выходе Unit
 typealias OnLikeListener = (post: Post) -> Unit
 typealias OnShareListener = (post: Post) -> Unit
 
-class PostAdapter(private val onLikeListener: OnLikeListener):
+//в качестве параметров принимает две lambda функции, имена которых определены typealias выше
+class PostAdapter(private val onLikeListener: OnLikeListener, private val onShareListener: OnShareListener):
     ListAdapter<Post, PostViewHolder>(PostDiffCallback) {
     // отвечает за создание viewHolder
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostViewHolder {
         val view = PostCardBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return PostViewHolder(view, onLikeListener)
+        return PostViewHolder(view, onLikeListener, onShareListener)
     }
 
     override fun onBindViewHolder(holder: PostViewHolder, position: Int) {
@@ -31,7 +33,7 @@ class PostAdapter(private val onLikeListener: OnLikeListener):
 class PostViewHolder(
     private val binding: PostCardBinding,
     private val onLikeListener: OnLikeListener,
-//    private val onShareListener: OnShareListener
+    private val onShareListener: OnShareListener
 ): RecyclerView.ViewHolder(binding.root) {
 
     fun bind(post: Post) {
@@ -51,9 +53,9 @@ class PostViewHolder(
             liked.setOnClickListener {
                 onLikeListener(post)
             }
-//            share.setOnClickListener {
-//                onShareListener(post)
-//            }
+            share.setOnClickListener {
+                onShareListener(post)
+            }
         }
     }
     private fun numToString(likes: Long): CharSequence? {

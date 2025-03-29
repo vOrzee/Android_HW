@@ -28,9 +28,11 @@ class MainActivity : AppCompatActivity() {
 
         val viewModel: PostViewModel by viewModels()
         //инициализировали адаптер для получения данных и View
-        val adapter = PostAdapter {
-            viewModel.likeById(it.id)
-        }
+        // передаём в качестве двух аргументов две функции
+        val adapter = PostAdapter (
+            {viewModel.likeById(it.id)},
+            {viewModel.shareById(it.id)}
+        )
         //подключили адаптер к элементам списка наших views
         binding.list.adapter = adapter
         viewModel.data.observe(this) { posts ->
