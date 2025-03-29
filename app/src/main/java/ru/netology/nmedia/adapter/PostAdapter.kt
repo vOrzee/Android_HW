@@ -2,6 +2,8 @@ package ru.netology.nmedia.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import ru.netology.nmedia.R
 import ru.netology.nmedia.databinding.PostCardBinding
@@ -11,23 +13,17 @@ import java.util.Locale
 typealias OnLikeListener = (post: Post) -> Unit
 typealias OnShareListener = (post: Post) -> Unit
 
-class PostAdapter(private val onLikeListener: OnLikeListener): RecyclerView.Adapter<PostViewHolder>() {
-
-    var list: List<Post> = emptyList()
-        set(value) {
-            field = value
-            notifyDataSetChanged()
-        }
+class PostAdapter(private val onLikeListener: OnLikeListener):
+    ListAdapter<Post, PostViewHolder>(PostDiffCallback) {
+    // отвечает за создание viewHolder
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostViewHolder {
         val view = PostCardBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return PostViewHolder(view, onLikeListener)
     }
 
-    override fun getItemCount() = list.size
-
     override fun onBindViewHolder(holder: PostViewHolder, position: Int) {
-        holder.bind(list[position])
+        holder.bind(getItem(position))
     }
 
 }
@@ -37,6 +33,7 @@ class PostViewHolder(
     private val onLikeListener: OnLikeListener,
 //    private val onShareListener: OnShareListener
 ): RecyclerView.ViewHolder(binding.root) {
+
     fun bind(post: Post) {
         with(binding) {
             author.text = post.author
@@ -54,9 +51,9 @@ class PostViewHolder(
             liked.setOnClickListener {
                 onLikeListener(post)
             }
-            share.setOnClickListener {
+//            share.setOnClickListener {
 //                onShareListener(post)
-            }
+//            }
         }
     }
     private fun numToString(likes: Long): CharSequence? {
@@ -91,4 +88,15 @@ class PostViewHolder(
         }
         return likes.toString()
     }
+}
+
+object PostDiffCallback : DiffUtil.ItemCallback<Post>() {
+    override fun areItemsTheSame(oldItem: Post, newItem: Post): Boolean {
+        return oldItem.id == newItem.id
+    }
+
+    override fun areContentsTheSame(oldItem: Post, newItem: Post): Boolean {
+        return oldItem == newItem
+    }
+
 }
