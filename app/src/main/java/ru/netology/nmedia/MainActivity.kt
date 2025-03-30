@@ -31,7 +31,8 @@ class MainActivity : AppCompatActivity() {
         // передаём в качестве двух аргументов две функции
         val adapter = PostAdapter (
             {viewModel.likeById(it.id)},
-            {viewModel.shareById(it.id)}
+            {viewModel.shareById(it.id)},
+            {viewModel.removeById(it.id)}
         )
         //подключили адаптер к элементам списка наших views
         binding.list.adapter = adapter

@@ -2,10 +2,12 @@ package ru.netology.nmedia.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.appcompat.widget.PopupMenu
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import ru.netology.nmedia.R
+import ru.netology.nmedia.adapter.OnRemoveListener
 import ru.netology.nmedia.databinding.PostCardBinding
 import ru.netology.nmedia.dto.Post
 import java.util.Locale
@@ -13,15 +15,19 @@ import java.util.Locale
 //этот alias определяет следующий тип: лямбда функция, у которой на входе Post, а на выходе Unit
 typealias OnLikeListener = (post: Post) -> Unit
 typealias OnShareListener = (post: Post) -> Unit
+typealias OnRemoveListener = (post: Post) -> Unit
 
 //в качестве параметров принимает две lambda функции, имена которых определены typealias выше
-class PostAdapter(private val onLikeListener: OnLikeListener, private val onShareListener: OnShareListener):
-    ListAdapter<Post, PostViewHolder>(PostDiffCallback) {
+class PostAdapter(
+    private val onLikeListener: OnLikeListener,
+    private val onShareListener: OnShareListener,
+    private val onRemoveListener: OnRemoveListener
+    ): ListAdapter<Post, PostViewHolder>(PostDiffCallback) {
     // отвечает за создание viewHolder
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostViewHolder {
         val view = PostCardBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return PostViewHolder(view, onLikeListener, onShareListener)
+        return PostViewHolder(view, onLikeListener, onShareListener, onRemoveListener)
     }
 
     override fun onBindViewHolder(holder: PostViewHolder, position: Int) {
@@ -33,7 +39,8 @@ class PostAdapter(private val onLikeListener: OnLikeListener, private val onShar
 class PostViewHolder(
     private val binding: PostCardBinding,
     private val onLikeListener: OnLikeListener,
-    private val onShareListener: OnShareListener
+    private val onShareListener: OnShareListener,
+    private val onRemoveListener: OnRemoveListener
 ): RecyclerView.ViewHolder(binding.root) {
 
     fun bind(post: Post) {
@@ -56,8 +63,24 @@ class PostViewHolder(
             share.setOnClickListener {
                 onShareListener(post)
             }
+            menu.setOnClickListener {
+                PopupMenu(it.context, it).apply {
+                    inflate(R.menu.post_actions)
+                    setOnMenuItemClickListener {item ->
+                        when(item.itemId) {
+                            R.id.remove -> {
+                                onRemoveListener(post)
+                                true
+                            }
+                            else -> false
+                        }
+
+                    }
+                }
+            }.show()
         }
     }
+
     private fun numToString(likes: Long): CharSequence? {
         if (likes in 1000..9999){
 

@@ -5,4 +5,5 @@
     <string name="liked_count">0</string>
     <string name="share_count">0</string>
     <string name="view_count">0</string>
+    <string name="menu_remove">Remove</string>
 </resources>

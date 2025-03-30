@@ -57,6 +57,13 @@ class PostRepositoryInMemoryImpl: PostRepository {
         data.value = posts
     }
 
+    override fun removeById(id: Long) {
+        posts = posts.filter{
+            it.id != id
+        }
+        data.value = posts
+    }
+
     /*
        if (post.likedByMe) post.likes ++ else post.likes --
                     likedCount.text = if (post.likes < 1) "" else numToString(post.likes)
