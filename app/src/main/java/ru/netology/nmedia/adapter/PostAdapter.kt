@@ -7,27 +7,28 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import ru.netology.nmedia.R
-import ru.netology.nmedia.adapter.OnRemoveListener
 import ru.netology.nmedia.databinding.PostCardBinding
 import ru.netology.nmedia.dto.Post
 import java.util.Locale
 
 //этот alias определяет следующий тип: лямбда функция, у которой на входе Post, а на выходе Unit
-typealias OnLikeListener = (post: Post) -> Unit
-typealias OnShareListener = (post: Post) -> Unit
-typealias OnRemoveListener = (post: Post) -> Unit
+// заменили изначальную реализацию алиасов интерфейсом
+interface OnInteractionListener {
+    fun onLike(post: Post) {}
+    fun onShare(post: Post) {}
+    fun onRemove(post: Post) {}
+    fun onEdit(post: Post) {}
+}
 
 //в качестве параметров принимает две lambda функции, имена которых определены typealias выше
 class PostAdapter(
-    private val onLikeListener: OnLikeListener,
-    private val onShareListener: OnShareListener,
-    private val onRemoveListener: OnRemoveListener
+    private val onInteractionListener: OnInteractionListener
     ): ListAdapter<Post, PostViewHolder>(PostDiffCallback) {
     // отвечает за создание viewHolder
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostViewHolder {
         val view = PostCardBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return PostViewHolder(view, onLikeListener, onShareListener, onRemoveListener)
+        return PostViewHolder(view, onInteractionListener)
     }
 
     override fun onBindViewHolder(holder: PostViewHolder, position: Int) {
@@ -38,9 +39,7 @@ class PostAdapter(
 
 class PostViewHolder(
     private val binding: PostCardBinding,
-    private val onLikeListener: OnLikeListener,
-    private val onShareListener: OnShareListener,
-    private val onRemoveListener: OnRemoveListener
+    private val onInteractionListener: OnInteractionListener
 ): RecyclerView.ViewHolder(binding.root) {
 
     fun bind(post: Post) {
@@ -58,10 +57,10 @@ class PostViewHolder(
                 if (post.likedByMe) R.drawable.baseline_favorite_24 else R.drawable.baseline_favorite_border_24
             )
             liked.setOnClickListener {
-                onLikeListener(post)
+                onInteractionListener.onLike(post)
             }
             share.setOnClickListener {
-                onShareListener(post)
+                onInteractionListener.onShare(post)
             }
             menu.setOnClickListener {
                 PopupMenu(it.context, it).apply {
@@ -69,7 +68,11 @@ class PostViewHolder(
                     setOnMenuItemClickListener {item ->
                         when(item.itemId) {
                             R.id.remove -> {
-                                onRemoveListener(post)
+                                onInteractionListener.onRemove(post)
+                                true
+                            }
+                            R.id.edit -> {
+                                onInteractionListener.onEdit(post)
                                 true
                             }
                             else -> false

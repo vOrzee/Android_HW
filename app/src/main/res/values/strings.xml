@@ -6,4 +6,6 @@
     <string name="share_count">0</string>
     <string name="view_count">0</string>
     <string name="menu_remove">Remove</string>
+    <string name="menu_edit">Edit</string>
+    <string name="error_empty_content">Empty Content!</string>
 </resources>
