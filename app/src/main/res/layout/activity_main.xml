@@ -14,7 +14,6 @@
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintBottom_toTopOf="@id/barrier_bottom"
         tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="16dp"
         tools:listitem="@layout/post_card" />
 
     <androidx.constraintlayout.widget.Group
@@ -98,7 +97,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="@id/main"
-        android:background="@android:color/transparent"
+        android:background="@android:color/white"
         app:layout_constraintBottom_toBottomOf="@id/main"/>
     
 

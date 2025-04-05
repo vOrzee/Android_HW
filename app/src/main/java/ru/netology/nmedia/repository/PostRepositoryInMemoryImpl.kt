@@ -76,22 +76,4 @@ class PostRepositoryInMemoryImpl: PostRepository {
         }
         data.value = posts
     }
-
-    /*
-       if (post.likedByMe) post.likes ++ else post.likes --
-                    likedCount.text = if (post.likes < 1) "" else numToString(post.likes)
-
-                }
-
-                share.setOnClickListener {
-                    post.reposts ++
-                    shareCount.text = if (post.reposts < 1) "" else numToString(post.reposts)
-                }
-
-                root.setOnClickListener{
-                    post.views ++
-                    viewCount.text = if (post.views < 1) "" else numToString(post.views)
-                }
-
-     */
 }

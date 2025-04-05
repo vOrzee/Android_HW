@@ -22,7 +22,7 @@ class PostViewModel: ViewModel() {
 
     val edited = MutableLiveData(empty)
 
-    fun edit(post: Post) {
+    fun edit(post: Post = empty) {
         edited.value = post
     }
 

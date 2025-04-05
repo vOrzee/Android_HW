@@ -1,6 +1,7 @@
 package ru.netology.nmedia
 
 import android.os.Bundle
+import android.view.View
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
@@ -30,9 +31,9 @@ class MainActivity : AppCompatActivity() {
         val binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-
         val viewModel: PostViewModel by viewModels()
-        //инициализировали адаптер для получения данных и View
+
+        // инициализировали адаптер для получения данных и View
         // передаём в качестве двух аргументов две функции
         val adapter = PostAdapter (object: OnInteractionListener {
             override fun onLike(post: Post) {
@@ -49,12 +50,15 @@ class MainActivity : AppCompatActivity() {
 
             override fun onEdit(post: Post) {
                 viewModel.edit(post)
+                binding.editPreview.text = post.content
+                binding.editGroup.visibility = View.VISIBLE
             }
 
         })
 
         //подключили адаптер к элементам списка наших views
         binding.list.adapter = adapter
+
         viewModel.data.observe(this) { posts ->
             val newPost = adapter.currentList.size < posts.size
             adapter.submitList(posts) {
@@ -71,18 +75,28 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+        binding.editCancel.setOnClickListener {
+            binding.content.setText("")
+            binding.editPreview.text = ""
+            binding.editGroup.visibility = View.GONE
+            binding.content.clearFocus()
+            AndroidUtils.hideKeyboard(it)
+            viewModel.edit()
+        }
+
         binding.add.setOnClickListener {
             val text = binding.content.text.toString()
             if (text.isNullOrBlank()) {
                 Toast.makeText(this, R.string.error_empty_content, Toast.LENGTH_LONG).show()
                 return@setOnClickListener
             }
+
             viewModel.changeContentAndSave(text)
+            binding.editGroup.visibility = View.GONE
             binding.content.setText("")
             binding.content.clearFocus()
 
             AndroidUtils.hideKeyboard(it)
-
         }
 
     }

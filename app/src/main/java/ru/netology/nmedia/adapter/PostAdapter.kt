@@ -11,7 +11,7 @@ import ru.netology.nmedia.databinding.PostCardBinding
 import ru.netology.nmedia.dto.Post
 import java.util.Locale
 
-//этот alias определяет следующий тип: лямбда функция, у которой на входе Post, а на выходе Unit
+// этот alias определяет следующий тип: лямбда функция, у которой на входе Post, а на выходе Unit
 // заменили изначальную реализацию алиасов интерфейсом
 interface OnInteractionListener {
     fun onLike(post: Post) {}
@@ -34,7 +34,6 @@ class PostAdapter(
     override fun onBindViewHolder(holder: PostViewHolder, position: Int) {
         holder.bind(getItem(position))
     }
-
 }
 
 class PostViewHolder(
