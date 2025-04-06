@@ -32,10 +32,6 @@ class PostViewModel: ViewModel() {
                 repository.save(it.copy(content = text))
             }
         }
-//
-//        edited.value?.let {
-//            repository.save(it)
-//        }
         edited.value = empty
     }
 
