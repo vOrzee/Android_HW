@@ -46,7 +46,7 @@ class PostViewHolder(
             author.text = post.author
             published.text = post.published
             content.text = post.content
-            shareCount.text = numToString(post.reposts)
+            share.text = numToString(post.reposts)
             viewCount.text = numToString(post.views)
             liked.apply {
                 isChecked = post.likedByMe

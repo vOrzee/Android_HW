@@ -78,24 +78,18 @@ android:padding="16dp">
     app:iconSize="24dp"
     app:layout_constraintTop_toBottomOf="@id/content"/>
 
-<ImageView
+<com.google.android.material.button.MaterialButton
     android:id="@+id/share"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:src="@drawable/baseline_share_24"
+    style="@style/App.Widget.ShareButton"
+    app:icon="@drawable/ic_share_celector"
+    app:iconSize="24dp"
+    android:text="@string/share_count"
     app:layout_constraintTop_toBottomOf="@id/content"
     app:layout_constraintStart_toEndOf="@id/liked"
-    android:layout_margin="@dimen/common_spacing" />
-
-<TextView
-    android:id="@+id/share_count"
-    android:layout_width="wrap_content"
-    android:minWidth="30dp"
-    android:layout_height="wrap_content"
-    android:layout_margin="@dimen/common_spacing"
-    app:layout_constraintTop_toBottomOf="@id/content"
-    app:layout_constraintStart_toEndOf="@id/share"
-    android:text="@string/share_count" />
+    android:layout_margin="@dimen/tiny_spacing" />
 
 <ImageView
     android:id="@+id/watched"

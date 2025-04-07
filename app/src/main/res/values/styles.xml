@@ -7,4 +7,7 @@
         <item name="iconTint">@color/color_like_selector</item>
         <item name="backgroundTint">@android:color/transparent</item>
     </style>
+    <style name="App.Widget.ShareButton" parent="Widget.MaterialComponents.Button.TextButton">
+        <item name="iconTint">@color/color_share_selector</item>
+    </style>
 </resources>
