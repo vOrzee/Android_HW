@@ -53,11 +53,6 @@ class PostViewHolder(
                 text = numToString(post.likes)
             }
 
-//            liked.setImageResource(R.drawable.baseline_favorite_24)
-//
-//            liked.setImageResource(
-//                if (post.likedByMe) R.drawable.baseline_favorite_24 else R.drawable.baseline_favorite_border_24
-//            )
             liked.setOnClickListener {
                 onInteractionListener.onLike(post)
             }
