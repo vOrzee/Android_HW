@@ -10,4 +10,5 @@
     <string name="menu_edit">Изменить</string>
     <string name="error_empty_content">Пустое содержимое!</string>
     <string name="edit_constant">Изменить пост</string>
+    <string name="chooser_chare_post">Текст для отправки</string>
 </resources>

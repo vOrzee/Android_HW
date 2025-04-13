@@ -9,4 +9,5 @@
     <string name="menu_edit">Edit</string>
     <string name="error_empty_content">Empty Content!</string>
     <string name="edit_constant">Edit Post</string>
+    <string name="chooser_chare_post">Text to share</string>
 </resources>

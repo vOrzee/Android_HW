@@ -1,5 +1,6 @@
-package ru.netology.nmedia
+package ru.netology.nmedia.activity
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
@@ -8,13 +9,13 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import ru.netology.nmedia.PostViewModel
+import ru.netology.nmedia.R
 import ru.netology.nmedia.adapter.OnInteractionListener
 import ru.netology.nmedia.adapter.PostAdapter
 import ru.netology.nmedia.databinding.ActivityMainBinding
-import ru.netology.nmedia.databinding.PostCardBinding
 import ru.netology.nmedia.dto.Post
 import ru.netology.nmedia.util.AndroidUtils
-import java.util.Locale
 
 class MainActivity : AppCompatActivity() {
 
@@ -41,6 +42,15 @@ class MainActivity : AppCompatActivity() {
             }
 
             override fun onShare(post: Post) {
+                val intent = Intent().apply {
+                    action = Intent.ACTION_SEND
+                    putExtra(Intent.EXTRA_TEXT, post.content)
+                    type = "text/plain"
+                }
+
+                val shareIntent = Intent.createChooser(intent, getString(R.string.chooser_chare_post))
+                startActivity(shareIntent)
+
                 viewModel.shareById(post.id)
             }
 
@@ -68,12 +78,6 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        viewModel.edited.observe(this) {
-            if (it.id != 0L) {
-                binding.content.setText(it.content)
-                binding.content.requestFocus()
-            }
-        }
 
         binding.editCancel.setOnClickListener {
             binding.content.setText("")
@@ -82,6 +86,13 @@ class MainActivity : AppCompatActivity() {
             binding.content.clearFocus()
             AndroidUtils.hideKeyboard(it)
             viewModel.edit()
+        }
+
+        viewModel.edited.observe(this) {
+            if (it.id != 0L) {
+                binding.content.setText(it.content)
+                binding.content.requestFocus()
+            }
         }
 
         binding.add.setOnClickListener {
