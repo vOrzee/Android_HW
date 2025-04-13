@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.result.contract.ActivityResultContract
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -17,14 +18,26 @@ class NewPostActivity : AppCompatActivity() {
         val binding = ActivityNewPostBinding.inflate(layoutInflater)
         setContentView(binding.root)
         binding.content.requestFocus()
+        val message = intent.getStringExtra("EXTRA_MESSAGE").toString()
+        var newIntent = Intent()
+        if (message.isNotBlank()) {
+            binding.content.setText(message)
+            newIntent = Intent(this@NewPostActivity, MainActivity::class.java)
+        }
         binding.ok.setOnClickListener {
             val content = binding.content.text.toString()
             val intent = Intent()
             if (content.isBlank()) {
                 setResult(Activity.RESULT_CANCELED)
-            } else {
-                intent.putExtra(Intent.EXTRA_TEXT, content)
-                setResult(Activity.RESULT_OK, intent)
+            } else{
+                if (message.isNotBlank()) {
+                    newIntent.also{
+                        newIntent.putExtra(Intent.EXTRA_TEXT, content)
+                    }
+                } else {
+                    intent.putExtra(Intent.EXTRA_TEXT, content)
+                    setResult(Activity.RESULT_OK, intent)
+                }
             }
             finish()
         }
