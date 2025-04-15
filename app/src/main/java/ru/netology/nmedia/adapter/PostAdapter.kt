@@ -1,6 +1,7 @@
 package ru.netology.nmedia.adapter
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.PopupMenu
 import androidx.recyclerview.widget.DiffUtil
@@ -48,6 +49,9 @@ class PostViewHolder(
             content.text = post.content
             share.text = numToString(post.reposts)
             viewCount.text = numToString(post.views)
+            if (post.video.isNotBlank()){
+                videoGroup.visibility = View.VISIBLE
+            }
             liked.apply {
                 isChecked = post.likedByMe
                 text = numToString(post.likes)
