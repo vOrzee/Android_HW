@@ -18,11 +18,9 @@ class NewPostActivity : AppCompatActivity() {
         val binding = ActivityNewPostBinding.inflate(layoutInflater)
         setContentView(binding.root)
         binding.content.requestFocus()
-        val message = intent.getStringExtra("EXTRA_MESSAGE").toString()
-        var newIntent = Intent()
+        val message = intent.getStringExtra(Intent.EXTRA_TEXT).toString()
         if (message.isNotBlank()) {
             binding.content.setText(message)
-            newIntent = Intent(this@NewPostActivity, MainActivity::class.java)
         }
         binding.ok.setOnClickListener {
             val content = binding.content.text.toString()
@@ -30,14 +28,8 @@ class NewPostActivity : AppCompatActivity() {
             if (content.isBlank()) {
                 setResult(Activity.RESULT_CANCELED)
             } else{
-                if (message.isNotBlank()) {
-                    newIntent.also{
-                        newIntent.putExtra(Intent.EXTRA_TEXT, content)
-                    }
-                } else {
-                    intent.putExtra(Intent.EXTRA_TEXT, content)
-                    setResult(Activity.RESULT_OK, intent)
-                }
+                intent.putExtra(Intent.EXTRA_TEXT, content)
+                setResult(Activity.RESULT_OK, intent)
             }
             finish()
         }

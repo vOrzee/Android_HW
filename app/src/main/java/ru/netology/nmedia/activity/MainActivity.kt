@@ -36,7 +36,7 @@ class MainActivity : AppCompatActivity() {
 
         val viewModel: PostViewModel by viewModels()
 
-        val newPostLauncher = registerForActivityResult(NewPostResultContract()) { content ->
+        val newPostLauncher = registerForActivityResult(NewPostResultContract) { content ->
             content ?:return@registerForActivityResult
             viewModel.changeContentAndSave(content)
         }
@@ -54,7 +54,6 @@ class MainActivity : AppCompatActivity() {
                     putExtra(Intent.EXTRA_TEXT, post.content)
                     type = "text/plain"
                 }
-                newPostLauncher.launch()
 
                 val shareIntent = Intent.createChooser(intent, getString(R.string.chooser_chare_post))
                 startActivity(shareIntent)
@@ -67,11 +66,7 @@ class MainActivity : AppCompatActivity() {
             }
 
             override fun onEdit(post: Post) {
-                val myIntent = Intent(this@MainActivity, NewPostActivity::class.java).also {
-                    it.putExtra("EXTRA_MESSAGE", post.content)
-                    startActivity(it)
-                }
-                val content =  intent.getStringExtra("EXTRA_MESSAGE").toString()
+                newPostLauncher.launch(post.content)
                 viewModel.edit(post)
             }
 
@@ -101,7 +96,7 @@ class MainActivity : AppCompatActivity() {
 
 
         binding.fab.setOnClickListener {
-            newPostLauncher.launch()
+            newPostLauncher.launch("")
         }
 
 
