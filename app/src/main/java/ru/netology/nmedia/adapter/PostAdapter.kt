@@ -19,6 +19,7 @@ interface OnInteractionListener {
     fun onShare(post: Post) {}
     fun onRemove(post: Post) {}
     fun onEdit(post: Post) {}
+    fun onPlayVideo(post: Post) {}
 }
 
 //в качестве параметров принимает две lambda функции, имена которых определены typealias выше
@@ -55,6 +56,14 @@ class PostViewHolder(
             liked.apply {
                 isChecked = post.likedByMe
                 text = numToString(post.likes)
+            }
+
+            video.setOnClickListener{
+                onInteractionListener.onPlayVideo(post)
+            }
+
+            videoButton.setOnClickListener{
+                onInteractionListener.onPlayVideo(post)
             }
 
             liked.setOnClickListener {
