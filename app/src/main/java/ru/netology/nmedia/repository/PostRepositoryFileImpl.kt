@@ -1,5 +1,6 @@
 package ru.netology.nmedia.repository
 
+
 import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -7,15 +8,17 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import ru.netology.nmedia.dto.Post
 
-class PostRepositorySharedPrefsImpl (
-    context: Context
-): PostRepository {
+class PostRepositoryFileImpl (
+    private val context: Context
+) : PostRepository {
 
     private val gson = Gson()
     private val prefs = context.getSharedPreferences("repo", Context.MODE_PRIVATE)
     private val type = TypeToken.getParameterized(List::class.java, Post::class.java).type
     private val key = "posts"
+    private val filename = "posts.json"
     private var nextId: Long = 1L
+
     // для этого свойства сделали кастомный сеттер, который всегда вызывает sync()
     var posts = emptyList<Post>()
         set(value) {
@@ -23,13 +26,17 @@ class PostRepositorySharedPrefsImpl (
             data.value = posts
             sync()
         }
+
     private val data = MutableLiveData(posts)
 
 
     init {
-        prefs.getString(key, null)?.let{
-            posts = gson.fromJson(it, type)
-            nextId = (posts.maxOfOrNull { it.id } ?: 0) + 1
+        val file = context.filesDir.resolve(filename)
+        if (file.exists()) {
+            context.openFileInput(filename).bufferedReader().use {
+                posts = gson.fromJson(it, type)
+                nextId = (posts.maxOfOrNull { it.id } ?: 0) + 1
+            }
         }
     }
 
@@ -64,9 +71,8 @@ class PostRepositorySharedPrefsImpl (
     }
 
     fun sync() {
-        with(prefs.edit()) {
-            putString(key, gson.toJson(posts))
-            apply()
+        context.openFileOutput(filename, Context.MODE_PRIVATE).bufferedWriter().use {
+            it.write(gson.toJson(posts))
         }
     }
 }
