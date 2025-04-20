@@ -16,7 +16,7 @@ android:padding="16dp">
     android:contentDescription="@string/description_post_author"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toTopOf="parent"
-    tools:srcCompat="@drawable/netology"/>
+    app:srcCompat="@drawable/netology"/>
 
 <TextView
     android:id="@+id/author"
