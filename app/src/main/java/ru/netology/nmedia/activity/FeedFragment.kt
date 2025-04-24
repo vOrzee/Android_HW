@@ -26,12 +26,7 @@ class FeedFragment : Fragment() {
     ): View {
         val binding = FragmentFeedBinding.inflate(inflater, container, false)
 
-        val viewModel: PostViewModel by viewModels()
-
-//        val newPostLauncher = registerForActivityResult(NewPostResultContract) { content ->
-//            content ?:return@registerForActivityResult
-//            viewModel.changeContentAndSave(content)
-//        }
+        val viewModel: PostViewModel by viewModels(ownerProducer = ::requireParentFragment)
 
         // инициализировали адаптер для получения данных и View
         // передаём в качестве двух аргументов две функции
@@ -58,7 +53,7 @@ class FeedFragment : Fragment() {
             }
 
             override fun onEdit(post: Post) {
-//                newPostLauncher.launch(post.content)
+                findNavController().navigate(R.id.action_feedFragment_to_newPostFragment)
                 viewModel.edit(post)
             }
 
