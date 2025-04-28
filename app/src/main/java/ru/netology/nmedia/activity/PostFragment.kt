@@ -14,22 +14,25 @@ import ru.netology.nmedia.R
 import ru.netology.nmedia.activity.NewPostFragment.Companion.textArg
 import ru.netology.nmedia.adapter.OnInteractionListener
 import ru.netology.nmedia.adapter.PostAdapter
-import ru.netology.nmedia.databinding.FragmentFeedBinding
+import ru.netology.nmedia.adapter.PostViewHolder
+import ru.netology.nmedia.databinding.FragmentPostBinding
+import ru.netology.nmedia.databinding.PostCardBinding
 import ru.netology.nmedia.dto.Post
 
-
-class FeedFragment : Fragment() {
-
+class PostFragment: Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val binding = FragmentFeedBinding.inflate(inflater, container, false)
 
         val viewModel: PostViewModel by viewModels(ownerProducer = ::requireParentFragment)
 
-        val adapter = PostAdapter (object: OnInteractionListener {
+        val binding = FragmentPostBinding.inflate(inflater, container, false)
+
+        val holder = PostViewHolder(
+            binding.post,
+            object: OnInteractionListener {
             override fun onLike(post: Post) {
                 viewModel.likeById(post.id)
             }
@@ -43,17 +46,18 @@ class FeedFragment : Fragment() {
 
                 val shareIntent = Intent.createChooser(intent, getString(R.string.chooser_chare_post))
                 startActivity(shareIntent)
-                viewModel.shareById(post.id)
 
+                viewModel.shareById(post.id)
             }
 
             override fun onRemove(post: Post) {
+                findNavController().navigateUp()
                 viewModel.removeById(post.id)
             }
 
             override fun onEdit(post: Post) {
                 findNavController().navigate(
-                    R.id.action_feedFragment_to_newPostFragment,
+                    R.id.action_postFragment_to_newPostFragment,
                     Bundle().apply {
                         textArg = post.content
                     }
@@ -65,32 +69,14 @@ class FeedFragment : Fragment() {
                 val videoIntent = Intent(Intent.ACTION_VIEW, Uri.parse(post.video))
                 startActivity(videoIntent)
             }
-
-            override fun onPostClick(post: Post) {
-                findNavController().navigate(
-                    R.id.action_feedFragment_to_postFragment,
-                    Bundle().apply {
-                        textArg = post.id.toString()
-                    })
             }
+        )
 
-        })
-
-        //подключили адаптер к элементам списка наших views
-        binding.list.adapter = adapter
-
-        viewModel.data.observe(viewLifecycleOwner) { posts ->
-            val newPost = adapter.currentList.size < posts.size
-            adapter.submitList(posts) {
-                if (newPost){
-                    binding.list.scrollToPosition(0)
-                }
-            }
+        viewModel.data.observe(viewLifecycleOwner) {
+            val post = it.filter { it.id ==  arguments?.textArg?.toLong()}.last()
+            holder.bind(post)
         }
 
-        binding.fab.setOnClickListener {
-            findNavController().navigate(R.id.action_feedFragment_to_newPostFragment)
-        }
         return binding.root
     }
 }

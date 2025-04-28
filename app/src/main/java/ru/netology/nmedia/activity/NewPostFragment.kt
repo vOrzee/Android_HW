@@ -23,7 +23,6 @@ class NewPostFragment : Fragment() {
         val binding = FragmentNewPostBinding.inflate(inflater, container, false)
         val viewModel: PostViewModel by viewModels(ownerProducer = ::requireParentFragment)
 
-        val intent = Intent()
         binding.content.requestFocus()
 
 //        arguments?.textArg?.let {

@@ -20,6 +20,7 @@ interface OnInteractionListener {
     fun onRemove(post: Post) {}
     fun onEdit(post: Post) {}
     fun onPlayVideo(post: Post) {}
+    fun onPostClick(post: Post) {}
 }
 
 //в качестве параметров принимает две lambda функции, имена которых определены typealias выше
@@ -37,6 +38,7 @@ class PostAdapter(
         holder.bind(getItem(position))
     }
 }
+
 
 class PostViewHolder(
     private val binding: PostCardBinding,
@@ -90,6 +92,9 @@ class PostViewHolder(
 
                     }
                 }.show()
+            }
+            content.setOnClickListener {
+                onInteractionListener.onPostClick(post)
             }
         }
     }
