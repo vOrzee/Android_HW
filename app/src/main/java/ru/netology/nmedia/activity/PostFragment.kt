@@ -73,8 +73,12 @@ class PostFragment: Fragment() {
         )
 
         viewModel.data.observe(viewLifecycleOwner) {
-            val post = it.filter { it.id ==  arguments?.textArg?.toLong()}.last()
-            holder.bind(post)
+            val id = arguments?.getInt("id")?.toLong()
+            val post = it.find { it.id == id}
+//            val post = it.find { it.id ==  arguments?.textArg?.toLong()}
+            if (post != null) {
+                holder.bind(post)
+            }
         }
 
         return binding.root

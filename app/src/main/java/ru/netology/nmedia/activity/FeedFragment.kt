@@ -67,10 +67,15 @@ class FeedFragment : Fragment() {
             }
 
             override fun onPostClick(post: Post) {
+//                findNavController().navigate(
+//                    R.id.action_feedFragment_to_postFragment,
+//                    Bundle().apply {
+//                        textArg = post.id.toString()
+//                    })
                 findNavController().navigate(
                     R.id.action_feedFragment_to_postFragment,
                     Bundle().apply {
-                        textArg = post.id.toString()
+                        putInt("id", post.id.toInt())
                     })
             }
 
