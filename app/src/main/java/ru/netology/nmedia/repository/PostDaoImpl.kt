@@ -38,7 +38,7 @@ class PostDaoImpl(private val db: SQLiteDatabase): PostDao {
         )
     }
 
-    override fun getAll(): LiveData<List<Post>> {
+    override fun getAll(): List<Post> {
         val posts = mutableListOf<Post>()
         db.query(
             PostColumns.TABLE,
