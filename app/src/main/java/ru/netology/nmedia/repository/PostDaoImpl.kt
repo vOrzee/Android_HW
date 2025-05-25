@@ -15,7 +15,10 @@ class PostDaoImpl(private val db: SQLiteDatabase): PostDao {
                 ${PostColumns.COLUMN_CONTENT} TEXT NOT NULL,
                 ${PostColumns.COLUMN_PUBLISHED} TEXT NOT NULL,
                 ${PostColumns.COLUMN_LIKED_BY_ME} BOOLEAN NOT NULL DEFAULT 0,
-                ${PostColumns.COLUMN_LIKES} BOOLEAN NOT NULL DEFAULT 0
+                ${PostColumns.COLUMN_LIKES} INTEGER NOT NULL DEFAULT 0,
+                ${PostColumns.COLUMN_REPOSTS} INTEGER NOT NULL DEFAULT 0,
+                ${PostColumns.COLUMN_VIEWS} INTEGER NOT NULL DEFAULT 0,
+                ${PostColumns.COLUMN_VIDEO} TEXT DEFAULT 'https://youtu.be/Yoa6i9rEXkk'
             );
         """.trimIndent()
     }
@@ -28,13 +31,19 @@ class PostDaoImpl(private val db: SQLiteDatabase): PostDao {
         const val COLUMN_PUBLISHED = "published"
         const val COLUMN_LIKED_BY_ME = "likedByMe"
         const val COLUMN_LIKES = "likes"
+        const val COLUMN_REPOSTS = "reposts"
+        const val COLUMN_VIEWS = "views"
+        const val COLUMN_VIDEO = "video"
         val ALL_COLUMNS = arrayOf(
             COLUMN_ID,
             COLUMN_AUTHOR,
             COLUMN_CONTENT,
             COLUMN_PUBLISHED,
             COLUMN_LIKED_BY_ME,
-            COLUMN_LIKES
+            COLUMN_LIKES,
+            COLUMN_REPOSTS,
+            COLUMN_VIEWS,
+            COLUMN_VIDEO
         )
     }
 
@@ -107,7 +116,13 @@ class PostDaoImpl(private val db: SQLiteDatabase): PostDao {
     }
 
     override fun shareById(id: Long) {
-        TODO("Not yet implemented")
+        db.execSQL(
+            """
+                UPDATE posts SET
+                    reposts = reposts + 1
+                WHERE id = ?;
+            """.trimIndent(), arrayOf(id)
+        )
     }
 
     private fun map(cursor: Cursor):Post {
@@ -118,7 +133,10 @@ class PostDaoImpl(private val db: SQLiteDatabase): PostDao {
                 content = getString(getColumnIndexOrThrow(PostColumns.COLUMN_CONTENT)),
                 published = getString(getColumnIndexOrThrow(PostColumns.COLUMN_PUBLISHED)),
                 likedByMe = getInt(getColumnIndexOrThrow(PostColumns.COLUMN_LIKED_BY_ME)) == 1,
-                likes = getLong(getColumnIndexOrThrow(PostColumns.COLUMN_LIKES))
+                likes = getLong(getColumnIndexOrThrow(PostColumns.COLUMN_LIKES)),
+                reposts = getLong(getColumnIndexOrThrow(PostColumns.COLUMN_REPOSTS)),
+                views = getLong(getColumnIndexOrThrow(PostColumns.COLUMN_VIEWS)),
+                video = getString(getColumnIndexOrThrow(PostColumns.COLUMN_VIDEO))
             )
         }
     }
