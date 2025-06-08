@@ -45,7 +45,7 @@ class AppActivity : AppCompatActivity() {
     }
 
     private fun requestNotificationsPermission() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
             return
         }
         val permission = Manifest.permission.POST_NOTIFICATIONS
