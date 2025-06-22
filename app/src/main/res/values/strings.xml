@@ -10,4 +10,7 @@
     <string name="error_empty_content">Empty Content!</string>
     <string name="edit_constant">Edit Post</string>
     <string name="chooser_chare_post">Text to share</string>
+    <string name="notification_user_liked">User %1$s liked %2$s\'s post</string>
+    <string name="channel_remote_name">Server notifications</string>
+    <string name="channel_remote_description">Notifications from remote server</string>
 </resources>
