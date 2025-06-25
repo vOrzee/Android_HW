@@ -42,9 +42,15 @@ class FCMService: FirebaseMessagingService() {
     }
 
     override fun onMessageReceived(message: RemoteMessage) {
+
         message.data["action"]?.let {
-            when (Action.valueOf(it)) {
-                Action.LIKE -> handleLike(gson.fromJson(message.data[content], Like::class.java))
+            try {
+                when (Action.valueOf(it)) {
+                    Action.LIKE -> handleLike(gson.fromJson(message.data[content], Like::class.java))
+                }
+            }
+            catch (e: IllegalArgumentException) {
+                 handleUnknownNotification()
             }
         }
     }
@@ -64,6 +70,21 @@ class FCMService: FirebaseMessagingService() {
             NotificationManagerCompat.from(this).notify(Random.nextInt(100_000), notification)
         }
     }
+
+    private fun handleUnknownNotification() {
+        if (ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.POST_NOTIFICATIONS
+            ) == PackageManager.PERMISSION_GRANTED
+        ) {
+            val notification = NotificationCompat.Builder(this, CHANNEL_ID)
+                .setSmallIcon(R.drawable.ic_notification)
+                .setContentTitle("Возможно, у вас есть новые уведомления!")
+                .build()
+            NotificationManagerCompat.from(this).notify(Random.nextInt(100_000), notification)
+        }
+    }
+
 
     companion object {
         private const val CHANNEL_ID = "notifications"
