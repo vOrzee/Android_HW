@@ -47,6 +47,7 @@ class FCMService: FirebaseMessagingService() {
             try {
                 when (Action.valueOf(it)) {
                     Action.LIKE -> handleLike(gson.fromJson(message.data[content], Like::class.java))
+                    Action.NEW_POST -> handleNewPost(gson.fromJson(message.data[content], NewPost::class.java))
                 }
             }
             catch (e: IllegalArgumentException) {
@@ -66,6 +67,23 @@ class FCMService: FirebaseMessagingService() {
             val notification = NotificationCompat.Builder(this, CHANNEL_ID)
                 .setSmallIcon(R.drawable.ic_notification)
                 .setContentTitle(getString(R.string.notification_user_liked, content.userName, content.postAuthor))
+                .build()
+            NotificationManagerCompat.from(this).notify(Random.nextInt(100_000), notification)
+        }
+    }
+    private fun handleNewPost(content: NewPost) {
+        if (ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.POST_NOTIFICATIONS
+            ) == PackageManager.PERMISSION_GRANTED
+        ) {
+
+            val notification = NotificationCompat.Builder(this, CHANNEL_ID)
+                .setSmallIcon(R.drawable.ic_notification)
+                .setContentTitle(content.author)
+                .setContentText(content.published)
+                .setStyle(NotificationCompat.BigTextStyle()
+                    .bigText(content.content))
                 .build()
             NotificationManagerCompat.from(this).notify(Random.nextInt(100_000), notification)
         }
@@ -94,7 +112,14 @@ class FCMService: FirebaseMessagingService() {
 
 enum class Action {
     LIKE,
+    NEW_POST
 }
+
+data class NewPost (
+    val author: String,
+    val content: String,
+    val published: String
+)
 
 data class Like (
     val userId: Long,
